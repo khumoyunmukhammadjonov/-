@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RGB color generator</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="favicon/favicon.png">
+  </head>
+  <body>
+    <section class="main">
+      <div class="main-body">
+        <div class="main-body-div">
+          <div class="heading">
+            <p>Color generator</p>
+          </div>
+          <div class="generator">
+           <span class="r-g-b">R</span> <input type="range" min="0" max="255" value="0" id="red" oninput="colors()">
+          </div>
+          <div class="generator">
+            <span class="r-g-b">G</span> <input type="range" min="0" max="255" value="0" id="green" oninput="colors()">
+          </div>
+          <div class="generator">
+            <span class="r-g-b">B</span> <input type="range" min="0" max="255" value="0" id="blue" oninput="colors()">
+          </div>
+          <br>
+           <button class="btn" id="output">rgb(0,0,0)</button>
+      </div>
+    </section>
+    <script src="javascript/app.js"></script>
+  </body>
+</html>
