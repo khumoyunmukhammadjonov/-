@@ -1,32 +1,195 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>RGB color generator</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" type="image/x-icon" href="favicon/favicon.png">
-  </head>
-  <body>
-    <section class="main">
-      <div class="main-body">
-        <div class="main-body-div">
-          <div class="heading">
-            <p>Color generator</p>
-          </div>
-          <div class="generator">
-           <span class="r-g-b">R</span> <input type="range" min="0" max="255" value="0" id="red" oninput="colors()">
-          </div>
-          <div class="generator">
-            <span class="r-g-b">G</span> <input type="range" min="0" max="255" value="0" id="green" oninput="colors()">
-          </div>
-          <div class="generator">
-            <span class="r-g-b">B</span> <input type="range" min="0" max="255" value="0" id="blue" oninput="colors()">
-          </div>
-          <br>
-           <button class="btn" id="output">rgb(0,0,0)</button>
-      </div>
-    </section>
-    <script src="javascript/app.js"></script>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Impossible Click Game</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f7f7f7;
+      text-align: center;
+    }
+
+    .game-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    #gameButton {
+      padding: 10px;
+      font-size: 12px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      position: absolute;
+    }
+
+    #gameButton:hover {
+      background-color: #218838;
+    }
+
+    #message {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      color: black;
+    }
+
+    #restartButton {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: none;
+      margin-top: 20px;
+    }
+
+    #restartButton:hover {
+      background-color: #0056b3;
+    }
+
+    /* Dog image styling */
+    #dogImage {
+      display: none;
+      margin-top: 20px;
+      max-width: 300px;
+    }
+
+    /* Responsive YouTube video styling */
+    #youtubeVideo {
+      display: none;
+      margin-top: 20px;
+      position: relative;
+      width: 100%;
+      max-width: 800px; /* Set a reasonable max-width for larger screens */
+      height: 0;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    }
+
+    #youtubeVideo iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Mobile-friendly styles */
+    @media (max-width: 600px) {
+      #gameButton {
+        padding: 8px;
+        font-size: 10px;
+      }
+
+      #message {
+        font-size: 1.2em;
+      }
+
+      #restartButton {
+        font-size: 14px;
+      }
+
+      #dogImage {
+        max-width: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>Лови кнопку лох!</h1>
+    <p id="message"></p>
+    <button id="gameButton">Click Me!</button>
+    <img id="dogImage" src="" alt="Dog Image" />
+    <div id="youtubeVideo">
+      <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <button id="restartButton">Restart</button>
+
+  <script>
+    const gameButton = document.getElementById('gameButton');
+    const message = document.getElementById('message');
+    const restartButton = document.getElementById('restartButton');
+    const dogImage = document.getElementById('dogImage');
+    const youtubeVideo = document.getElementById('youtubeVideo');
+    let gameRunning = true;
+    let timer;
+
+    function randomPosition() {
+      const x = Math.random() * (window.innerWidth - gameButton.offsetWidth);
+      const y = Math.random() * (window.innerHeight - gameButton.offsetHeight);
+      return { x, y };
+    }
+
+    function moveButton() {
+      if (!gameRunning) return;
+
+      const { x, y } = randomPosition();
+      gameButton.style.left = `${x}px`;
+      gameButton.style.top = `${y}px`;
+    }
+
+    function startGame() {
+      gameRunning = true;
+      gameButton.style.display = 'block';
+      restartButton.style.display = 'none';
+      dogImage.style.display = 'none';  // Hide the dog image on restart
+      youtubeVideo.style.display = 'none';  // Hide YouTube video on restart
+      message.textContent = '';
+      message.style.color = 'black';
+      moveButton();
+      timer = setTimeout(loseGame, 10000); // Time limit to click the button
+    }
+
+    function loseGame() {
+      gameRunning = false;
+      gameButton.style.display = 'none';
+      message.style.color = 'red';
+      dogImage.src = 'https://media.tenor.com/IlBT5P2zMoQAAAAM/help-dog.gif';  // Open-source funny dog image
+      dogImage.style.display = 'block';  // Show the mocking dog image
+      restartButton.style.display = 'block';
+    }
+
+    function winGame() {
+      clearTimeout(timer);
+      gameRunning = false;
+      gameButton.style.display = 'none';
+      message.style.color = 'green';
+      youtubeVideo.style.display = 'block';   // Show the YouTube video
+      restartButton.style.display = 'block';
+    }
+
+    gameButton.addEventListener('click', () => {
+      if (gameRunning) {
+        winGame();
+      }
+    });
+    
+    restartButton.addEventListener('click', startGame);
+
+    window.onload = startGame;
+
+    setInterval(moveButton, 100); // Keep moving the button every 100ms
+  </script>
+</body>
 </html>
